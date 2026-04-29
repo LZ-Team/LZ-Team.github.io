@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LZ-Team CTF 战队成员展示页面。">
+    <title>Members | LZ-Team</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <div class="grid-overlay"></div>
+
+    <header class="site-header">
+        <a class="brand" href="index.html">
+            <span class="brand-mark">LZ</span>
+            <span>
+                <strong>LZ-Team</strong>
+                <small>Capture The Flag</small>
+            </span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="打开导航">☰</button>
+        <nav class="site-nav">
+            <a href="index.html">Home</a>
+            <a href="writeups.html">Writeups</a>
+            <a href="members.html" class="active">Members</a>
+            <a href="honors.html">Honors</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section page-hero">
+            <p class="eyebrow">whoami && id && groups</p>
+            <h1 data-text="Members">Members</h1>
+            <p class="hero-text">不同方向的队员组成完整攻击面：有人负责入口，有人负责利用，有人负责密码和逆向，也有人在深夜守着最后一血。</p>
+        </section>
+
+        <section class="section member-grid">
+            <article class="member-card">
+                <header>
+                    <div class="avatar">0x01</div>
+                    <div>
+                        <h3>RootLZ</h3>
+                        <small>Captain / Web</small>
+                    </div>
+                </header>
+                <p>偏爱源码审计、权限绕过和业务逻辑漏洞，口头禅是“先看路由，再找入口”。</p>
+                <div class="skill-list">
+                    <span>PHP</span>
+                    <span>Node.js</span>
+                    <span>SSTI</span>
+                    <span>SQLi</span>
+                </div>
+            </article>
+            <article class="member-card">
+                <header>
+                    <div class="avatar">0x02</div>
+                    <div>
+                        <h3>StackGhost</h3>
+                        <small>Pwn / Exploit</small>
+                    </div>
+                </header>
+                <p>在 gdb 和 pwndbg 里生活，擅长 ROP、堆利用、格式化字符串和 libc 猜谜。</p>
+                <div class="skill-list">
+                    <span>ROP</span>
+                    <span>Heap</span>
+                    <span>Kernel</span>
+                    <span>pwntools</span>
+                </div>
+            </article>
+            <article class="member-card">
+                <header>
+                    <div class="avatar">0x03</div>
+                    <div>
+                        <h3>ByteNeko</h3>
+                        <small>Reverse / Mobile</small>
+                    </div>
+                </header>
+                <p>喜欢把混淆拆成控制流，把 VM 还原成指令表，把输入约束交给自动化脚本。</p>
+                <div class="skill-list">
+                    <span>IDA</span>
+                    <span>Frida</span>
+                    <span>Android</span>
+                    <span>Z3</span>
+                </div>
+            </article>
+            <article class="member-card">
+                <header>
+                    <div class="avatar">0x04</div>
+                    <div>
+                        <h3>CryptoFox</h3>
+                        <small>Crypto / Math</small>
+                    </div>
+                </header>
+                <p>专注 RSA、椭圆曲线、格攻击和伪随机分析，坚信数学才是最优雅的 payload。</p>
+                <div class="skill-list">
+                    <span>RSA</span>
+                    <span>ECC</span>
+                    <span>LLL</span>
+                    <span>SageMath</span>
+                </div>
+            </article>
+            <article class="member-card">
+                <header>
+                    <div class="avatar">0x05</div>
+                    <div>
+                        <h3>PacketKid</h3>
+                        <small>Misc / Forensics</small>
+                    </div>
+                </header>
+                <p>抓包、取证、隐写、流量复原都能接，最常用的命令是 strings、binwalk 和 tshark。</p>
+                <div class="skill-list">
+                    <span>Wireshark</span>
+                    <span>Volatility</span>
+                    <span>Stego</span>
+                    <span>OSINT</span>
+                </div>
+            </article>
+            <article class="member-card">
+                <header>
+                    <div class="avatar">0x06</div>
+                    <div>
+                        <h3>ShellRunner</h3>
+                        <small>DevOps / Infra</small>
+                    </div>
+                </header>
+                <p>维护训练平台、靶机环境和自动化脚本，让每一场比赛都稳定上线、快速复盘。</p>
+                <div class="skill-list">
+                    <span>Docker</span>
+                    <span>Linux</span>
+                    <span>CI/CD</span>
+                    <span>Monitor</span>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>2026 LZ-Team · Members · nc -lvnp 2026</p>
+        <a href="writeups.html">阅读 Writeups →</a>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

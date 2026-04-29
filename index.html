@@ -3,93 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LZ-Team</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            text-align: center;
-            background: white;
-            padding: 80px 60px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            margin: 20px;
-        }
-
-        .avatar {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto 30px;
-            font-size: 42px;
-            color: white;
-        }
-
-        h1 {
-            font-size: 36px;
-            color: #333;
-            margin-bottom: 12px;
-        }
-
-        .greeting {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 24px;
-        }
-
-        .status {
-            display: inline-block;
-            background: #f0fdf4;
-            color: #16a34a;
-            border: 1px solid #bbf7d0;
-            padding: 8px 24px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .info {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #aaa;
-            line-height: 1.8;
-        }
-
-        .emoji {
-            font-size: 60px;
-            margin-bottom: 20px;
-            display: block;
-        }
-    </style>
+    <meta name="description" content="LZ-Team CTF 战队展示博客，包含 Writeup、成员、荣誉与极客终端元素。">
+    <title>LZ-Team | CTF Cyber Base</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <span class="emoji">🚀</span>
-        <h1>LZ-Team</h1>
-        <p class="greeting">博客搭建成功！</p>
-        <span class="status">✅ GitHub Pages 运行中</span>
-        <div class="info">
-            访问地址：LZ-Team.github.io<br>
-            开始你的创作吧 🎉
-        </div>
-    </div>
+    <canvas id="matrix"></canvas>
+    <div class="grid-overlay"></div>
+
+    <header class="site-header">
+        <a class="brand" href="index.html">
+            <span class="brand-mark">LZ</span>
+            <span>
+                <strong>LZ-Team</strong>
+                <small>Capture The Flag</small>
+            </span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="打开导航">☰</button>
+        <nav class="site-nav">
+            <a href="index.html" class="active">Home</a>
+            <a href="writeups.html">Writeups</a>
+            <a href="members.html">Members</a>
+            <a href="honors.html">Honors</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero section">
+            <div class="hero-copy">
+                <p class="eyebrow">root@LZ-Team:~# ./pwn_the_world</p>
+                <h1 data-text="LZ-Team">LZ-Team</h1>
+                <p class="hero-text">
+                    一支专注 Web、Pwn、Reverse、Crypto、Misc 的 CTF 战队。我们记录攻防思路，分享赛题复盘，追踪每一次从 0day 灵感到 flag 到手的过程。
+                </p>
+                <div class="hero-actions">
+                    <a class="btn primary" href="writeups.html">查看 Writeups</a>
+                    <a class="btn ghost" href="members.html">认识队员</a>
+                </div>
+                <div class="flag-card">
+                    <span>FLAG</span>
+                    <code>LZCTF{W3lc0m3_T0_LZ_2026!!!}</code>
+                </div>
+            </div>
+            <div class="terminal-window">
+                <div class="terminal-top">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <strong>terminal</strong>
+                </div>
+                <div class="terminal-body">
+                    <p><span class="prompt">lz@team:~$</span> nc -lvnp 2026</p>
+                    <p>listening on [any] 2026 ...</p>
+                    <p>connect to [127.0.0.1] from challenger</p>
+                    <p><span class="prompt">challenger$</span> cat /flag</p>
+                    <p class="success">LZCTF{W3lc0m3_T0_LZ_2026!!!}</p>
+                    <p><span class="prompt">lz@team:~$</span> <span class="typing" data-typing="echo Hack harder, share better, win together."></span><span class="cursor"></span></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section stats">
+            <article>
+                <strong>2026</strong>
+                <span>监听端口</span>
+            </article>
+            <article>
+                <strong>5+</strong>
+                <span>研究方向</span>
+            </article>
+            <article>
+                <strong>24/7</strong>
+                <span>在线打靶</span>
+            </article>
+            <article>
+                <strong>0xLZ</strong>
+                <span>战队代号</span>
+            </article>
+        </section>
+
+        <section class="section split">
+            <div>
+                <p class="eyebrow">Latest Writeups</p>
+                <h2>从漏洞到 flag 的完整链路</h2>
+                <p class="muted">沉淀 Web 渗透、二进制利用、密码分析、逆向工程和杂项取证的解题过程，让每一次复盘都能成为下一次上分的武器。</p>
+            </div>
+            <div class="cards compact">
+                <a class="card" href="writeups.html">
+                    <span class="tag web">WEB</span>
+                    <h3>JWT Key Confusion</h3>
+                    <p>从源码审计到伪造管理员身份，拿下隐藏路由中的 flag。</p>
+                </a>
+                <a class="card" href="writeups.html">
+                    <span class="tag pwn">PWN</span>
+                    <h3>ret2libc Fast Path</h3>
+                    <p>泄露 libc、计算偏移、构造 ROP 链一气呵成。</p>
+                </a>
+                <a class="card" href="writeups.html">
+                    <span class="tag crypto">CRYPTO</span>
+                    <h3>RSA Common Modulus</h3>
+                    <p>利用同模攻击恢复明文，复盘大整数细节。</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="section modules">
+            <article>
+                <div class="icon">01</div>
+                <h3>Writeup 博客</h3>
+                <p>分类、搜索、难度标记、题目标签，适合长期积累战队知识库。</p>
+            </article>
+            <article>
+                <div class="icon">02</div>
+                <h3>成员展示</h3>
+                <p>展示队员方向、ID、技能栈和个人签名，突出团队协作风格。</p>
+            </article>
+            <article>
+                <div class="icon">03</div>
+                <h3>荣誉墙</h3>
+                <p>记录比赛名次、时间线、奖项和关键战绩，保留战队成长轨迹。</p>
+            </article>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 LZ-Team · cat /flag · nc -lvnp 2026</p>
+
+        <a href="honors.html">查看荣誉墙 →</a>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
