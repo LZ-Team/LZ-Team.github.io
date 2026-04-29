@@ -9,6 +9,33 @@ const escapeHtml = (value = '') => String(value)
 
 const navToggle = document.querySelector('.nav-toggle');
 const siteNav = document.querySelector('.site-nav');
+const themeToggle = document.querySelector('[data-theme-toggle]');
+const themeLabel = themeToggle?.querySelector('[data-theme-label]');
+const themeIcon = themeToggle?.querySelector('[data-theme-icon]');
+
+const getPreferredTheme = () => localStorage.getItem('lz-theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+
+const applyTheme = (theme) => {
+    document.documentElement.dataset.theme = theme;
+
+    if (themeLabel) {
+        themeLabel.textContent = theme === 'light' ? 'Light' : 'Dark';
+    }
+
+    if (themeIcon) {
+        themeIcon.textContent = theme === 'light' ? '☀' : '☾';
+    }
+};
+
+applyTheme(getPreferredTheme());
+
+if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        const nextTheme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+        localStorage.setItem('lz-theme', nextTheme);
+        applyTheme(nextTheme);
+    });
+}
 
 if (navToggle && siteNav) {
     navToggle.addEventListener('click', () => {
@@ -385,9 +412,12 @@ const renderHonors = () => {
         timeline.innerHTML = siteData.timeline.map((item) => `
             <li>
                 <time>${escapeHtml(item.time)}</time>
-                <div>
-                    <h3>${escapeHtml(item.title)}</h3>
-                    <p>${escapeHtml(item.description)}</p>
+                <div class="timeline-content">
+                    ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}">` : ''}
+                    <div>
+                        <h3>${escapeHtml(item.title)}</h3>
+                        <p>${escapeHtml(item.description)}</p>
+                    </div>
                 </div>
             </li>
         `).join('');
@@ -447,6 +477,44 @@ const inlineMarkdown = (text) => escapeHtml(text)
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]+)\*/g, '<em>$1</em>');
 
+const codeBlockToHtml = (code = '', lang = '') => `
+    <div class="code-block">
+        <div class="code-toolbar">
+            <span>${escapeHtml(lang || 'text')}</span>
+            <button type="button" data-copy-code>Copy</button>
+        </div>
+        <pre><code class="language-${escapeHtml(lang)}">${escapeHtml(code)}</code></pre>
+    </div>
+`;
+
+const setupCodeCopyButtons = (scope = document) => {
+    scope.querySelectorAll('[data-copy-code]').forEach((button) => {
+        button.addEventListener('click', async () => {
+            const code = button.closest('.code-block')?.querySelector('code')?.textContent || '';
+
+            try {
+                await navigator.clipboard.writeText(code);
+                button.textContent = 'Copied';
+            } catch (error) {
+                const textarea = document.createElement('textarea');
+                textarea.value = code;
+                textarea.setAttribute('readonly', '');
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                textarea.remove();
+                button.textContent = 'Copied';
+            }
+
+            window.setTimeout(() => {
+                button.textContent = 'Copy';
+            }, 1400);
+        });
+    });
+};
+
 const markdownToHtml = (markdown) => {
     const lines = markdown.replace(/\r\n/g, '\n').split('\n');
     const html = [];
@@ -467,7 +535,7 @@ const markdownToHtml = (markdown) => {
 
         if (codeMatch) {
             if (inCode) {
-                html.push(`<pre><code class="language-${escapeHtml(codeLang)}">${escapeHtml(codeBuffer.join('\n'))}</code></pre>`);
+                html.push(codeBlockToHtml(codeBuffer.join('\n'), codeLang));
                 codeBuffer = [];
                 codeLang = '';
                 inCode = false;
@@ -524,7 +592,7 @@ const markdownToHtml = (markdown) => {
     closeList();
 
     if (inCode) {
-        html.push(`<pre><code class="language-${escapeHtml(codeLang)}">${escapeHtml(codeBuffer.join('\n'))}</code></pre>`);
+        html.push(codeBlockToHtml(codeBuffer.join('\n'), codeLang));
     }
 
     return html.join('\n');
@@ -574,6 +642,7 @@ const renderPost = async () => {
             ${post.banner ? `<figure class="post-banner"><img src="${escapeHtml(post.banner)}" alt="${escapeHtml(post.title)}"></figure>` : ''}
             ${markdownToHtml(post.body)}
         `;
+        setupCodeCopyButtons(container);
     } catch (error) {
         container.innerHTML = `<p class="muted">Markdown 加载失败：${escapeHtml(error.message)}。请确认通过 HTTP 服务或 GitHub Pages 访问，而不是直接双击本地 HTML。</p>`;
     }

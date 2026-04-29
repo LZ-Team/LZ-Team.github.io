@@ -77,17 +77,26 @@ window.LZ_SITE_DATA = {
         {
             time: '2026-04',
             title: '完成战队知识库重构',
-            description: '统一题目标签、难度、复盘模板和 payload 归档方式。'
+            description: '统一题目标签、难度、复盘模板和 payload 归档方式，将赛后沉淀与 Writeup 发布流程固定下来。',
+            image: 'https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202603170907662.png'
+        },
+        {
+            time: '2026-03',
+            title: 'SUCTF2026 团队突破',
+            description: '多方向协作完成关键题目攻坚，比赛复盘与截图记录同步归档到荣誉墙。',
+            image: 'https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202603170801748.png'
         },
         {
             time: '2026-02',
             title: '建立二进制专项训练',
-            description: '围绕 ROP、堆利用、沙箱逃逸建立持续训练计划。'
+            description: '围绕 ROP、堆利用、沙箱逃逸建立持续训练计划，形成稳定训练节奏。',
+            image: 'lz_logo.png'
         },
         {
             time: '2025-11',
             title: '首次进入全国赛 Top 10',
-            description: '多方向均衡得分，战队协同体系进入稳定阶段。'
+            description: '多方向均衡得分，战队协同体系进入稳定阶段。',
+            image: 'lz_logo.png'
         }
     ],
     stats: [
