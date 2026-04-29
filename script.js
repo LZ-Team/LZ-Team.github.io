@@ -1,4 +1,4 @@
-const siteData = window.LZ_SITE_DATA || {};
+﻿const siteData = window.LZ_SITE_DATA || {};
 
 const escapeHtml = (value = '') => String(value)
     .replaceAll('&', '&amp;')
@@ -57,10 +57,232 @@ if (canvas) {
     window.addEventListener('resize', resize);
 }
 
+let hydratedPosts = [];
+
+const normalizeArray = (value) => {
+    if (Array.isArray(value)) {
+        return value;
+    }
+
+    if (!value) {
+        return [];
+    }
+
+    return String(value)
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean);
+};
+
+const stripYamlQuotes = (value = '') => String(value).trim().replace(/^['"]|['"]$/g, '');
+
+const parseYamlValue = (value = '') => {
+    const trimmed = stripYamlQuotes(value);
+    const arrayMatch = trimmed.match(/^\[(.*)]$/);
+
+    if (arrayMatch) {
+        return arrayMatch[1]
+            .split(',')
+            .map((item) => stripYamlQuotes(item))
+            .filter(Boolean);
+    }
+
+    return trimmed;
+};
+
+const parseFrontMatter = (markdown = '') => {
+    const normalized = markdown.replace(/\r\n/g, '\n');
+
+    if (!normalized.startsWith('---\n')) {
+        return {
+            data: {},
+            body: markdown
+        };
+    }
+
+    const endIndex = normalized.indexOf('\n---', 4);
+
+    if (endIndex === -1) {
+        return {
+            data: {},
+            body: markdown
+        };
+    }
+
+    const raw = normalized.slice(4, endIndex).trim();
+    const body = normalized.slice(endIndex + 4).replace(/^\n/, '');
+    const data = {};
+    const lines = raw.split('\n');
+    let currentKey = '';
+
+    lines.forEach((line) => {
+        if (!line.trim()) {
+            return;
+        }
+
+        const listItem = line.match(/^\s*-\s+(.+)$/);
+
+        if (listItem && currentKey) {
+            data[currentKey] = Array.isArray(data[currentKey]) ? data[currentKey] : [];
+            data[currentKey].push(parseYamlValue(listItem[1]));
+            return;
+        }
+
+        const pair = line.match(/^([\w-]+):\s*(.*)$/);
+
+        if (pair) {
+            currentKey = pair[1];
+            data[currentKey] = pair[2] ? parseYamlValue(pair[2]) : [];
+        }
+    });
+
+    return {
+        data,
+        body
+    };
+};
+
+const titleFromMarkdown = (markdown = '') => {
+    const heading = markdown.match(/^#\s+(.+)$/m);
+    return heading ? heading[1].trim() : '';
+};
+
+const excerptFromMarkdown = (markdown = '') => markdown
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^[-*]\s+/gm, '')
+    .split('\n')
+    .map((line) => line.trim())
+    .find(Boolean) || '暂无摘要。';
+
+const slugFromFile = (file = '') => decodeURIComponent(file.split('/').pop().replace(/\.md$/i, ''));
+
+const postFromFile = (file) => ({
+    slug: slugFromFile(file),
+    file
+});
+
+const discoverPostsFromDirectory = async () => {
+    const response = await fetch('posts/');
+
+    if (!response.ok) {
+        return [];
+    }
+
+    const html = await response.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+
+    return [...doc.querySelectorAll('a')]
+        .map((link) => link.getAttribute('href') || '')
+        .map((href) => href.split('?')[0].split('#')[0])
+        .filter((href) => href.toLowerCase().endsWith('.md'))
+        .map((href) => postFromFile(`posts/${decodeURIComponent(href.split('/').pop())}`));
+};
+
+const discoverPostsFromGithub = async () => {
+    const hostParts = window.location.hostname.split('.');
+    const owner = hostParts[0];
+
+    if (!owner || !window.location.hostname.endsWith('github.io')) {
+        return [];
+    }
+
+    const repo = `${owner}.github.io`;
+    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/posts`);
+
+    if (!response.ok) {
+        return [];
+    }
+
+    const files = await response.json();
+
+    if (!Array.isArray(files)) {
+        return [];
+    }
+
+    return files
+        .filter((file) => file.type === 'file' && file.name.toLowerCase().endsWith('.md'))
+        .map((file) => postFromFile(file.path));
+};
+
+const uniquePosts = (posts = []) => {
+    const seen = new Set();
+
+    return posts.filter((post) => {
+        if (!post.file || seen.has(post.file)) {
+            return false;
+        }
+
+        seen.add(post.file);
+        return true;
+    });
+};
+
+const discoverPosts = async () => {
+    const discovered = [
+        ...await discoverPostsFromDirectory(),
+        ...await discoverPostsFromGithub()
+    ];
+
+    return uniquePosts(discovered.length ? discovered : siteData.posts);
+};
+
+const resolvePost = (post, markdown) => {
+    const parsed = parseFrontMatter(markdown);
+    const meta = parsed.data;
+    const categories = normalizeArray(meta.categories || meta.category || post.category);
+    const tags = normalizeArray(meta.tags || post.tags);
+    const title = meta.title || post.title || titleFromMarkdown(parsed.body) || post.slug;
+
+    return {
+        ...post,
+        ...meta,
+        title,
+        date: meta.date || post.date || '未发布',
+        category: String(categories[0] || 'misc').toLowerCase(),
+        categories,
+        tags,
+        difficulty: meta.difficulty || post.difficulty || 'Normal',
+        summary: meta.description || meta.excerpt || post.summary || excerptFromMarkdown(parsed.body),
+        cover: meta.index_img || meta.cover || meta.thumbnail || post.cover || '',
+        banner: meta.banner_img || meta.banner || meta.index_img || post.banner || post.cover || '',
+        body: parsed.body,
+        raw: markdown
+    };
+};
+
+const fetchPostMarkdown = async (post) => {
+    const response = await fetch(post.file);
+
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+    }
+
+    const markdown = await response.text();
+    return resolvePost(post, markdown);
+};
+
+const loadPosts = async () => {
+    const posts = await discoverPosts();
+    const results = await Promise.all(posts.map(async (post) => {
+        try {
+            return await fetchPostMarkdown(post);
+        } catch (error) {
+            console.warn(`Failed to load ${post.file}`, error);
+            return null;
+        }
+    }));
+
+    hydratedPosts = results.filter(Boolean);
+    hydratedPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return hydratedPosts;
+};
+
 const tagClass = (category = '') => category.toLowerCase();
 
 const postCard = (post) => `
     <a class="card" data-card data-category="${escapeHtml(post.category)}" href="post.html?post=${encodeURIComponent(post.slug)}">
+        ${post.cover ? `<div class="card-cover"><img src="${escapeHtml(post.cover)}" alt="${escapeHtml(post.title)}"></div>` : ''}
         <span class="tag ${tagClass(post.category)}">${escapeHtml(post.category).toUpperCase()}</span>
         <h3>${escapeHtml(post.title)}</h3>
         <p>${escapeHtml(post.summary)}</p>
@@ -72,20 +294,34 @@ const postCard = (post) => `
     </a>
 `;
 
-const renderWriteupList = () => {
+const renderWriteupList = (posts = hydratedPosts) => {
     const grid = document.getElementById('writeupGrid');
 
-    if (grid && siteData.posts) {
-        grid.innerHTML = siteData.posts.map(postCard).join('');
+    if (grid) {
+        grid.innerHTML = posts.map(postCard).join('');
     }
 
     const latest = document.getElementById('latestWriteups');
 
-    if (latest && siteData.posts) {
-        latest.innerHTML = siteData.posts.slice(0, 3).map(postCard).join('');
+    if (latest) {
+        latest.innerHTML = posts.slice(0, 3).map(postCard).join('');
     }
 };
 
+const renderCategoryFilters = (posts = hydratedPosts) => {
+    const filters = document.querySelector('.filters');
+
+    if (!filters || !posts.length) {
+        return;
+    }
+
+    const categories = [...new Set(posts.map((post) => post.category).filter(Boolean))];
+
+    filters.innerHTML = [
+        '<button class="filter-btn active" type="button" data-filter="all">ALL</button>',
+        ...categories.map((category) => `<button class="filter-btn" type="button" data-filter="${escapeHtml(category)}">${escapeHtml(category).toUpperCase()}</button>`)
+    ].join('');
+};
 const renderMembers = () => {
     const grid = document.getElementById('memberGrid');
 
@@ -287,13 +523,13 @@ const markdownToHtml = (markdown) => {
 const renderPost = async () => {
     const container = document.getElementById('postContent');
 
-    if (!container || !siteData.posts) {
+    if (!container || !hydratedPosts.length) {
         return;
     }
 
     const params = new URLSearchParams(window.location.search);
-    const slug = params.get('post') || siteData.posts[0]?.slug;
-    const post = siteData.posts.find((item) => item.slug === slug);
+    const slug = params.get('post') || hydratedPosts[0]?.slug;
+    const post = hydratedPosts.find((item) => item.slug === slug);
     const postTitle = document.getElementById('postTitle');
     const postMeta = document.getElementById('postMeta');
     const postSlugLabel = document.getElementById('postSlugLabel');
@@ -324,14 +560,10 @@ const renderPost = async () => {
     document.title = `${post.title} | LZ-Team`;
 
     try {
-        const response = await fetch(post.file);
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        const markdown = await response.text();
-        container.innerHTML = markdownToHtml(markdown);
+        container.innerHTML = `
+            ${post.banner ? `<figure class="post-banner"><img src="${escapeHtml(post.banner)}" alt="${escapeHtml(post.title)}"></figure>` : ''}
+            ${markdownToHtml(post.body)}
+        `;
     } catch (error) {
         container.innerHTML = `<p class="muted">Markdown 加载失败：${escapeHtml(error.message)}。请确认通过 HTTP 服务或 GitHub Pages 访问，而不是直接双击本地 HTML。</p>`;
     }
@@ -386,9 +618,50 @@ const setupTerminal = () => {
     });
 };
 
-renderWriteupList();
-renderMembers();
-renderHonors();
-setupWriteupFilters();
-renderPost();
-setupTerminal();
+const init = async () => {
+    try {
+        await loadPosts();
+    } catch (error) {
+        const grid = document.getElementById('writeupGrid');
+        const container = document.getElementById('postContent');
+        const message = `Markdown 加载失败：${escapeHtml(error.message)}。请确认通过 HTTP 服务或 GitHub Pages 访问。`;
+
+        if (grid) {
+            grid.innerHTML = `<div class="empty-state" style="display:block">${message}</div>`;
+        }
+
+        if (container) {
+            container.innerHTML = `<p class="muted">${message}</p>`;
+        }
+    }
+
+    if (!hydratedPosts.length) {
+        const grid = document.getElementById('writeupGrid');
+        const container = document.getElementById('postContent');
+        const message = '没有发现可加载的 Markdown 文章。';
+
+        if (grid) {
+            grid.innerHTML = `<div class="empty-state" style="display:block">${message}</div>`;
+        }
+
+        if (container) {
+            container.innerHTML = `<p class="muted">${message}</p>`;
+        }
+
+        renderMembers();
+        renderHonors();
+        setupTerminal();
+        return;
+    }
+
+    renderWriteupList();
+    renderCategoryFilters();
+    renderMembers();
+    renderHonors();
+    setupWriteupFilters();
+    await renderPost();
+    setupTerminal();
+};
+
+init();
+

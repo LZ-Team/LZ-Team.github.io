@@ -1,64 +1,12 @@
 window.LZ_SITE_DATA = {
     posts: [
         {
-            slug: 'jwt-key-confusion',
-            title: 'JWT Key Confusion',
-            category: 'web',
-            difficulty: 'Hard',
-            date: '2026-01-18',
-            tags: ['jwt', 'source-audit', 'auth-bypass'],
-            summary: '通过算法混淆与公钥复用完成身份伪造，进入 admin 面板后读取 /flag。',
-            file: 'posts/jwt-key-confusion.md'
+            slug: 'suctf2026-writeup',
+            file: 'posts/SUCTF2026-Writeup.md'
         },
         {
-            slug: 'ret2libc-fast-path',
-            title: 'ret2libc Fast Path',
-            category: 'pwn',
-            difficulty: 'Medium',
-            date: '2026-02-06',
-            tags: ['rop', 'libc', 'pwntools'],
-            summary: '利用栈溢出泄露 puts 地址，计算 libc 基址并构造 system("/bin/sh")。',
-            file: 'posts/ret2libc-fast-path.md'
-        },
-        {
-            slug: 'rsa-common-modulus',
-            title: 'RSA Common Modulus',
-            category: 'crypto',
-            difficulty: 'Easy',
-            date: '2026-02-21',
-            tags: ['rsa', 'egcd', 'number-theory'],
-            summary: '同模不同指数场景下使用扩展欧几里得合并密文，恢复明文 flag。',
-            file: 'posts/rsa-common-modulus.md'
-        },
-        {
-            slug: 'vm-bytecode-crackme',
-            title: 'VM Bytecode Crackme',
-            category: 'reverse',
-            difficulty: 'Hard',
-            date: '2026-03-09',
-            tags: ['vm', 'z3', 'ida'],
-            summary: '还原虚拟机指令集，编写解释器逆推输入约束，自动求解正确 flag。',
-            file: 'posts/vm-bytecode-crackme.md'
-        },
-        {
-            slug: 'memory-forensics-trail',
-            title: 'Memory Forensics Trail',
-            category: 'misc',
-            difficulty: 'Medium',
-            date: '2026-03-27',
-            tags: ['volatility', 'forensics', 'traffic'],
-            summary: '从内存镜像中定位进程、提取网络连接与剪贴板痕迹，拼接最终线索。',
-            file: 'posts/memory-forensics-trail.md'
-        },
-        {
-            slug: 'ssti-sandbox-escape',
-            title: 'SSTI Sandbox Escape',
-            category: 'web',
-            difficulty: 'Medium',
-            date: '2026-04-12',
-            tags: ['ssti', 'python', 'sandbox'],
-            summary: '利用模板对象链绕过黑名单，执行命令并通过 cat /flag 完成读取。',
-            file: 'posts/ssti-sandbox-escape.md'
+            slug: 'lilactf2026',
+            file: 'posts/LilacCTF2026.md'
         }
     ],
     members: [
