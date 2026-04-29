@@ -13,7 +13,7 @@
 
     <header class="site-header">
         <a class="brand" href="index.html">
-            <span class="brand-mark">LZ</span>
+            <span class="brand-mark logo-mark"><img src="logo_new.png" alt="LZ-Team Logo"></span>
             <span>
                 <strong>LZ-Team</strong>
                 <small>Capture The Flag</small>
@@ -32,7 +32,7 @@
         <section class="section page-hero">
             <p class="eyebrow">lz@writeups:~$ grep -r "flag" ./</p>
             <h1 data-text="Writeups">Writeups</h1>
-            <p class="hero-text">这里是 LZ-Team 的解题档案库。每篇文章都围绕漏洞入口、利用链路、关键 payload、踩坑记录和复盘总结展开。</p>
+            <p class="hero-text">这里是 LZ-Team 的解题档案库。文章以 Markdown 存放在 <code>posts/</code>，列表数据集中维护在 <code>data.js</code>，适合 GitHub Pages 静态部署。</p>
         </section>
 
         <section class="section">
@@ -52,67 +52,7 @@
 
             <div class="empty-state">没有匹配的 Writeup，换个关键词试试。</div>
 
-            <div class="writeup-grid">
-                <article class="card" data-card data-category="web">
-                    <span class="tag web">WEB</span>
-                    <h3>JWT Key Confusion</h3>
-                    <p>通过算法混淆与公钥复用完成身份伪造，进入 admin 面板后读取 <code>/flag</code>。</p>
-                    <div class="card-meta">
-                        <span>2026-01-18</span>
-                        <span>Hard</span>
-                        <span>#jwt #source-audit</span>
-                    </div>
-                </article>
-                <article class="card" data-card data-category="pwn">
-                    <span class="tag pwn">PWN</span>
-                    <h3>ret2libc Fast Path</h3>
-                    <p>利用栈溢出泄露 puts 地址，计算 libc 基址并构造 system('/bin/sh')。</p>
-                    <div class="card-meta">
-                        <span>2026-02-06</span>
-                        <span>Medium</span>
-                        <span>#rop #libc</span>
-                    </div>
-                </article>
-                <article class="card" data-card data-category="crypto">
-                    <span class="tag crypto">CRYPTO</span>
-                    <h3>RSA Common Modulus</h3>
-                    <p>同模不同指数场景下使用扩展欧几里得合并密文，恢复明文 flag。</p>
-                    <div class="card-meta">
-                        <span>2026-02-21</span>
-                        <span>Easy</span>
-                        <span>#rsa #egcd</span>
-                    </div>
-                </article>
-                <article class="card" data-card data-category="reverse">
-                    <span class="tag reverse">REVERSE</span>
-                    <h3>VM Bytecode Crackme</h3>
-                    <p>还原虚拟机指令集，编写解释器逆推输入约束，自动求解正确 flag。</p>
-                    <div class="card-meta">
-                        <span>2026-03-09</span>
-                        <span>Hard</span>
-                        <span>#vm #z3</span>
-                    </div>
-                </article>
-                <article class="card" data-card data-category="misc">
-                    <span class="tag misc">MISC</span>
-                    <h3>Memory Forensics Trail</h3>
-                    <p>从内存镜像中定位进程、提取网络连接与剪贴板痕迹，拼接最终线索。</p>
-                    <div class="card-meta">
-                        <span>2026-03-27</span>
-                        <span>Medium</span>
-                        <span>#volatility #forensics</span>
-                    </div>
-                </article>
-                <article class="card" data-card data-category="web">
-                    <span class="tag web">WEB</span>
-                    <h3>SSTI Sandbox Escape</h3>
-                    <p>利用模板对象链绕过黑名单，执行命令并通过 <code>cat /flag</code> 完成读取。</p>
-                    <div class="card-meta">
-                        <span>2026-04-12</span>
-                        <span>Medium</span>
-                        <span>#ssti #python</span>
-                    </div>
-                </article>
+            <div id="writeupGrid" class="writeup-grid">
             </div>
         </section>
     </main>
@@ -122,6 +62,7 @@
         <a href="index.html">返回主页 →</a>
     </footer>
 
+    <script src="data.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

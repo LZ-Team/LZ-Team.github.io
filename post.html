@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LZ-Team CTF Writeup Markdown 文章详情。">
+    <title>Writeup | LZ-Team</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <div class="grid-overlay"></div>
+
+    <header class="site-header">
+        <a class="brand" href="index.html">
+            <span class="brand-mark logo-mark"><img src="logo_new.png" alt="LZ-Team Logo"></span>
+            <span>
+                <strong>LZ-Team</strong>
+                <small>Capture The Flag</small>
+            </span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="打开导航">☰</button>
+        <nav class="site-nav">
+            <a href="index.html">Home</a>
+            <a href="writeups.html" class="active">Writeups</a>
+            <a href="members.html">Members</a>
+            <a href="honors.html">Honors</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section page-hero post-hero">
+            <p class="eyebrow">cat ./posts/<span id="postSlugLabel">loading</span>.md</p>
+            <h1 id="postTitle" data-text="Writeup">Writeup</h1>
+            <div id="postMeta" class="card-meta"></div>
+        </section>
+
+        <section class="section post-layout">
+            <article id="postContent" class="markdown-body panel">
+                <p class="muted">正在加载 Markdown 文章...</p>
+            </article>
+            <aside class="panel post-aside">
+                <p class="eyebrow">Static Blog</p>
+                <h3>维护方式</h3>
+                <p class="muted">文章 Markdown 存放在 <code>posts/</code>，图片等资源可放在 <code>assets/</code>，文章索引在 <code>data.js</code> 里维护。</p>
+                <a class="btn ghost" href="writeups.html">返回列表</a>
+            </aside>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>2026 LZ-Team · Markdown Writeup</p>
+        <a href="writeups.html">全部文章 →</a>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

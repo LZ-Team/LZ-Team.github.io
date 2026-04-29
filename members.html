@@ -13,7 +13,7 @@
 
     <header class="site-header">
         <a class="brand" href="index.html">
-            <span class="brand-mark">LZ</span>
+            <span class="brand-mark logo-mark"><img src="logo_new.png" alt="LZ-Team Logo"></span>
             <span>
                 <strong>LZ-Team</strong>
                 <small>Capture The Flag</small>
@@ -32,106 +32,10 @@
         <section class="section page-hero">
             <p class="eyebrow">whoami && id && groups</p>
             <h1 data-text="Members">Members</h1>
-            <p class="hero-text">不同方向的队员组成完整攻击面：有人负责入口，有人负责利用，有人负责密码和逆向，也有人在深夜守着最后一血。</p>
+            <p class="hero-text">成员数据集中维护在 <code>data.js</code> 的 <code>members</code> 数组中。新增队员只需要添加一条数据，无需复制整段 HTML。</p>
         </section>
 
-        <section class="section member-grid">
-            <article class="member-card">
-                <header>
-                    <div class="avatar">0x01</div>
-                    <div>
-                        <h3>RootLZ</h3>
-                        <small>Captain / Web</small>
-                    </div>
-                </header>
-                <p>偏爱源码审计、权限绕过和业务逻辑漏洞，口头禅是“先看路由，再找入口”。</p>
-                <div class="skill-list">
-                    <span>PHP</span>
-                    <span>Node.js</span>
-                    <span>SSTI</span>
-                    <span>SQLi</span>
-                </div>
-            </article>
-            <article class="member-card">
-                <header>
-                    <div class="avatar">0x02</div>
-                    <div>
-                        <h3>StackGhost</h3>
-                        <small>Pwn / Exploit</small>
-                    </div>
-                </header>
-                <p>在 gdb 和 pwndbg 里生活，擅长 ROP、堆利用、格式化字符串和 libc 猜谜。</p>
-                <div class="skill-list">
-                    <span>ROP</span>
-                    <span>Heap</span>
-                    <span>Kernel</span>
-                    <span>pwntools</span>
-                </div>
-            </article>
-            <article class="member-card">
-                <header>
-                    <div class="avatar">0x03</div>
-                    <div>
-                        <h3>ByteNeko</h3>
-                        <small>Reverse / Mobile</small>
-                    </div>
-                </header>
-                <p>喜欢把混淆拆成控制流，把 VM 还原成指令表，把输入约束交给自动化脚本。</p>
-                <div class="skill-list">
-                    <span>IDA</span>
-                    <span>Frida</span>
-                    <span>Android</span>
-                    <span>Z3</span>
-                </div>
-            </article>
-            <article class="member-card">
-                <header>
-                    <div class="avatar">0x04</div>
-                    <div>
-                        <h3>CryptoFox</h3>
-                        <small>Crypto / Math</small>
-                    </div>
-                </header>
-                <p>专注 RSA、椭圆曲线、格攻击和伪随机分析，坚信数学才是最优雅的 payload。</p>
-                <div class="skill-list">
-                    <span>RSA</span>
-                    <span>ECC</span>
-                    <span>LLL</span>
-                    <span>SageMath</span>
-                </div>
-            </article>
-            <article class="member-card">
-                <header>
-                    <div class="avatar">0x05</div>
-                    <div>
-                        <h3>PacketKid</h3>
-                        <small>Misc / Forensics</small>
-                    </div>
-                </header>
-                <p>抓包、取证、隐写、流量复原都能接，最常用的命令是 strings、binwalk 和 tshark。</p>
-                <div class="skill-list">
-                    <span>Wireshark</span>
-                    <span>Volatility</span>
-                    <span>Stego</span>
-                    <span>OSINT</span>
-                </div>
-            </article>
-            <article class="member-card">
-                <header>
-                    <div class="avatar">0x06</div>
-                    <div>
-                        <h3>ShellRunner</h3>
-                        <small>DevOps / Infra</small>
-                    </div>
-                </header>
-                <p>维护训练平台、靶机环境和自动化脚本，让每一场比赛都稳定上线、快速复盘。</p>
-                <div class="skill-list">
-                    <span>Docker</span>
-                    <span>Linux</span>
-                    <span>CI/CD</span>
-                    <span>Monitor</span>
-                </div>
-            </article>
+        <section id="memberGrid" class="section member-grid">
         </section>
     </main>
 
@@ -140,6 +44,7 @@
         <a href="writeups.html">阅读 Writeups →</a>
     </footer>
 
+    <script src="data.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -13,7 +13,7 @@
 
     <header class="site-header">
         <a class="brand" href="index.html">
-            <span class="brand-mark">LZ</span>
+            <span class="brand-mark logo-mark"><img src="logo_new.png" alt="LZ-Team Logo"></span>
             <span>
                 <strong>LZ-Team</strong>
                 <small>Capture The Flag</small>
@@ -32,28 +32,10 @@
         <section class="section page-hero">
             <p class="eyebrow">cat ./honors.log | tail -f</p>
             <h1 data-text="Honors">Honors</h1>
-            <p class="hero-text">这里记录 LZ-Team 的比赛成绩、关键突破和成长节点。每一次上榜都来自深夜调试、队友协作和最后几分钟的极限提交。</p>
+            <p class="hero-text">荣誉、战队数据面板和成长时间线都由 <code>data.js</code> 渲染，后续修改比赛成绩只需要维护数据。</p>
         </section>
 
-        <section class="section honor-grid">
-            <article class="honor-card">
-                <small>2026 Spring</small>
-                <strong>Top 3</strong>
-                <h3>高校网络安全挑战赛</h3>
-                <p>Web 与 Crypto 双线突破，最后阶段依靠 Pwn 题完成反超。</p>
-            </article>
-            <article class="honor-card">
-                <small>2026 Online</small>
-                <strong>1st Blood</strong>
-                <h3>LZCTF Internal Cup</h3>
-                <p>开赛 17 分钟拿下首血，payload 记录已沉淀到训练库。</p>
-            </article>
-            <article class="honor-card">
-                <small>2025 Winter</small>
-                <strong>Top 10</strong>
-                <h3>全国大学生 CTF 联赛</h3>
-                <p>多方向稳定得分，团队协作流程和赛后复盘体系正式成型。</p>
-            </article>
+        <section id="honorGrid" class="section honor-grid">
         </section>
 
         <section class="section split">
@@ -61,47 +43,10 @@
                 <p class="eyebrow">Scoreboard</p>
                 <h2>战队数据面板</h2>
                 <p class="muted">用于展示站队阶段性成果，可按真实比赛数据继续替换。</p>
-                <div class="scoreboard">
-                    <div>
-                        <strong>32</strong>
-                        <span>参赛场次</span>
-                    </div>
-                    <div>
-                        <strong>18</strong>
-                        <span>获奖记录</span>
-                    </div>
-                    <div>
-                        <strong>126</strong>
-                        <span>Writeups</span>
-                    </div>
-                    <div>
-                        <strong>9</strong>
-                        <span>First Blood</span>
-                    </div>
+                <div id="scoreboard" class="scoreboard">
                 </div>
             </div>
-            <ul class="timeline">
-                <li>
-                    <time>2026-04</time>
-                    <div>
-                        <h3>完成战队知识库重构</h3>
-                        <p>统一题目标签、难度、复盘模板和 payload 归档方式。</p>
-                    </div>
-                </li>
-                <li>
-                    <time>2026-02</time>
-                    <div>
-                        <h3>建立二进制专项训练</h3>
-                        <p>围绕 ROP、堆利用、沙箱逃逸建立持续训练计划。</p>
-                    </div>
-                </li>
-                <li>
-                    <time>2025-11</time>
-                    <div>
-                        <h3>首次进入全国赛 Top 10</h3>
-                        <p>多方向均衡得分，战队协同体系进入稳定阶段。</p>
-                    </div>
-                </li>
+            <ul id="timeline" class="timeline">
             </ul>
         </section>
     </main>
@@ -111,6 +56,7 @@
         <a href="members.html">查看成员 →</a>
     </footer>
 
+    <script src="data.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

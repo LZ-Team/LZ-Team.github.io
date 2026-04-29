@@ -13,7 +13,8 @@
 
     <header class="site-header">
         <a class="brand" href="index.html">
-            <span class="brand-mark">LZ</span>
+            <span class="brand-mark logo-mark"><img src="logo_new.png" alt="LZ-Team Logo"></span>
+
             <span>
                 <strong>LZ-Team</strong>
                 <small>Capture The Flag</small>
@@ -52,13 +53,17 @@
                     <span></span>
                     <strong>terminal</strong>
                 </div>
-                <div class="terminal-body">
-                    <p><span class="prompt">lz@team:~$</span> nc -lvnp 2026</p>
-                    <p>listening on [any] 2026 ...</p>
-                    <p>connect to [127.0.0.1] from challenger</p>
-                    <p><span class="prompt">challenger$</span> cat /flag</p>
-                    <p class="success">LZCTF{W3lc0m3_T0_LZ_2026!!!}</p>
-                    <p><span class="prompt">lz@team:~$</span> <span class="typing" data-typing="echo Hack harder, share better, win together."></span><span class="cursor"></span></p>
+                <div class="terminal-body interactive-terminal">
+                    <div id="terminalOutput" class="terminal-output">
+                        <p><span class="prompt">lz@team:~$</span> nc -lvnp 2026</p>
+                        <p>listening on [any] 2026 ...</p>
+                        <p>try commands: <code>help</code>, <code>cat /flag</code>, <code>whoami</code>, <code>ls</code>, <code>clear</code></p>
+                    </div>
+                    <form id="terminalForm" class="terminal-form" autocomplete="off">
+                        <span class="prompt">lz@team:~$</span>
+                        <input id="terminalInput" type="text" aria-label="终端命令输入" placeholder="输入 cat /flag 试试">
+                        <span class="cursor"></span>
+                    </form>
                 </div>
             </div>
         </section>
@@ -88,22 +93,7 @@
                 <h2>从漏洞到 flag 的完整链路</h2>
                 <p class="muted">沉淀 Web 渗透、二进制利用、密码分析、逆向工程和杂项取证的解题过程，让每一次复盘都能成为下一次上分的武器。</p>
             </div>
-            <div class="cards compact">
-                <a class="card" href="writeups.html">
-                    <span class="tag web">WEB</span>
-                    <h3>JWT Key Confusion</h3>
-                    <p>从源码审计到伪造管理员身份，拿下隐藏路由中的 flag。</p>
-                </a>
-                <a class="card" href="writeups.html">
-                    <span class="tag pwn">PWN</span>
-                    <h3>ret2libc Fast Path</h3>
-                    <p>泄露 libc、计算偏移、构造 ROP 链一气呵成。</p>
-                </a>
-                <a class="card" href="writeups.html">
-                    <span class="tag crypto">CRYPTO</span>
-                    <h3>RSA Common Modulus</h3>
-                    <p>利用同模攻击恢复明文，复盘大整数细节。</p>
-                </a>
+            <div id="latestWriteups" class="cards compact">
             </div>
         </section>
 
@@ -132,6 +122,7 @@
         <a href="honors.html">查看荣誉墙 →</a>
     </footer>
 
+    <script src="data.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
