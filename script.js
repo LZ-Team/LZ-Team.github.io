@@ -218,13 +218,22 @@ const uniquePosts = (posts = []) => {
     });
 };
 
+const safeDiscover = async (discoverer) => {
+    try {
+        return await discoverer();
+    } catch (error) {
+        console.warn('Post discovery failed', error);
+        return [];
+    }
+};
+
 const discoverPosts = async () => {
     const discovered = [
-        ...await discoverPostsFromDirectory(),
-        ...await discoverPostsFromGithub()
+        ...await safeDiscover(discoverPostsFromDirectory),
+        ...await safeDiscover(discoverPostsFromGithub)
     ];
 
-    return uniquePosts(discovered.length ? discovered : siteData.posts);
+    return uniquePosts(discovered.length ? discovered : (siteData.posts || []));
 };
 
 const resolvePost = (post, markdown) => {
@@ -664,4 +673,5 @@ const init = async () => {
 };
 
 init();
+
 
