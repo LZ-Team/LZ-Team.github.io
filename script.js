@@ -157,9 +157,10 @@ const excerptFromMarkdown = (markdown = '') => markdown
 
 const slugFromFile = (file = '') => decodeURIComponent(file.split('/').pop().replace(/\.md$/i, ''));
 
-const postFromFile = (file) => ({
+const postFromFile = (file, source = file) => ({
     slug: slugFromFile(file),
-    file
+    file,
+    source
 });
 
 const discoverPostsFromDirectory = async () => {
@@ -202,7 +203,7 @@ const discoverPostsFromGithub = async () => {
 
     return files
         .filter((file) => file.type === 'file' && file.name.toLowerCase().endsWith('.md'))
-        .map((file) => postFromFile(file.path));
+        .map((file) => postFromFile(file.path, file.download_url || file.path));
 };
 
 const uniquePosts = (posts = []) => {
@@ -261,7 +262,7 @@ const resolvePost = (post, markdown) => {
 };
 
 const fetchPostMarkdown = async (post) => {
-    const response = await fetch(post.file);
+    const response = await fetch(post.source || post.file);
 
     if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
@@ -673,5 +674,7 @@ const init = async () => {
 };
 
 init();
+
+
 
 
