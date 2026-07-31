@@ -1,0 +1,132 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { Icon } from 'astro-icon/components';
+import Sidebar from '../components/Sidebar.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  activeNav?: 'home' | 'members' | 'honors' | 'blog' | 'projects';
+  matrix?: boolean;
+  /** 沉浸式首屏：侧边栏初始隐藏，向下滚动后浮现 */
+  intro?: boolean;
+}
+
+const {
+  title,
+  description = 'LZ-Team —— 专注 Web、Pwn、Reverse、Crypto、Misc 的 CTF 战队博客',
+  activeNav = 'home',
+  matrix = true,
+  intro = false
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/png" href="/lz_logo.png" />
+    <ClientRouter />
+
+    <!-- 原生 View Transition 在本环境不稳定（偶发 abort 导致切换闪动/无动画跳变），
+         在 Astro 路由脚本加载前禁用它，统一降级为稳定的 SPA 替换 + CSS 内容淡入 -->
+    <meta name="astro-view-transitions-fallback" content="swap" />
+    <script is:inline>
+      try {
+        Object.defineProperty(Document.prototype, 'startViewTransition', {
+          configurable: true,
+          value: undefined
+        });
+      } catch (_) {}
+    </script>
+
+    <!-- 防主题闪烁：首帧渲染前确定主题；视图过渡换页前同步到新文档，避免跳动 -->
+    <script is:inline>
+      (function () {
+        var getTheme = function () {
+          try {
+            var saved = localStorage.getItem('lz-theme');
+            if (saved === 'light' || saved === 'dark') return saved;
+            return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          } catch (_) {
+            return 'dark';
+          }
+        };
+
+        document.documentElement.dataset.theme = getTheme();
+
+        // 视图过渡（ClientRouter）swap 会重置 <html> 属性，提前把主题写入新文档，
+        // 避免 data-theme 瞬时丢失导致明暗跳动（尤其亮色主题下闪一下深色）。
+        document.addEventListener('astro:before-swap', function (e) {
+          var t = getTheme();
+          document.documentElement.dataset.theme = t;
+          if (e && e.newDocument && e.newDocument.documentElement) {
+            e.newDocument.documentElement.dataset.theme = t;
+          }
+        });
+      })();
+    </script>
+  </head>
+  <body class={intro ? 'intro' : undefined}>
+    <!-- 氛围背景层：跨页保留，避免切换时重建闪烁 -->
+    <div class="bg-aurora" aria-hidden="true" transition:persist></div>
+    <div class="bg-grid" aria-hidden="true" transition:persist></div>
+    {matrix && <canvas id="matrix" class="matrix-canvas" aria-hidden="true" transition:persist></canvas>}
+
+    <Sidebar activeNav={activeNav} />
+
+    <div class="content">
+      <main>
+        <slot />
+      </main>
+
+      <Footer />
+    </div>
+
+    <!-- 回到顶部：圆环滚动进度 -->
+    <button
+      class="scroll-top"
+      type="button"
+      data-scroll-top
+      aria-label="回到顶部"
+      title="回到顶部"
+      transition:persist
+    >
+      <svg class="scroll-top-rings" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true">
+        <circle class="scroll-top-bg" cx="24" cy="24" r="20" />
+        <circle class="scroll-top-ring" cx="24" cy="24" r="20" data-ring />
+      </svg>
+      <Icon class="scroll-top-arrow" name="ph:arrow-up" aria-hidden="true" />
+    </button>
+
+    <script>
+      import { initThemeToggle } from '../scripts/theme';
+      import { initMatrix } from '../scripts/matrix';
+      import { initScrollProgress } from '../scripts/scroll-progress';
+      import { initIntroReveal } from '../scripts/intro-reveal';
+
+      let cleanupMatrix: (() => void) | null = null;
+
+      // astro:page-load 在首次加载与每次视图过渡导航后都会触发
+      document.addEventListener('astro:page-load', () => {
+        initThemeToggle();
+        initScrollProgress();
+        initIntroReveal();
+        cleanupMatrix?.();
+        const canvas = document.getElementById('matrix');
+        if (canvas instanceof HTMLCanvasElement) {
+          cleanupMatrix = initMatrix(canvas);
+        }
+      });
+    </script>
+  </body>
+</html>

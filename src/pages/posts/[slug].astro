@@ -1,0 +1,99 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort((a, b) =>
+    b.data.date.getTime() - a.data.date.getTime()
+  );
+
+  return posts.map((post, i) => ({
+    params: { slug: post.id.replace(/\.md$/i, '') },
+    props: { post, prev: posts[i - 1] ?? null, next: posts[i + 1] ?? null }
+  }));
+}
+
+const { post, prev, next } = Astro.props;
+const { Content, headings } = await render(post);
+const { data, id } = post;
+const slug = id.replace(/\.md$/i, '');
+
+const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const diffKey = data.difficulty.toLowerCase();
+const dateLabel = data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Base
+  title={`${data.title} | LZ-Team`}
+  description={data.description}
+  activeNav="blog"
+>
+  <section class="container page-hero">
+    <p class="eyebrow">cat ./content/{id}.md</p>
+    <h1 class="hero-title">{data.title}</h1>
+    <div class="post-meta-bar">
+      <span>📅 {dateLabel}</span>
+      {data.categories.map((cat) => (
+        <span class:list={['tag', 'tag--category', `tag--${cat.toLowerCase()}`]}>{cat}</span>
+      ))}
+      <span class:list={['difficulty', `difficulty--${diffKey}`]}>{data.difficulty}</span>
+      {data.tags.map((tag) => <span class="tag">#{tag}</span>)}
+    </div>
+  </section>
+
+  <section class="container section-tight post-layout">
+    <article class="post-article">
+      {data.banner_img && (
+        <img
+          src={data.banner_img}
+          alt={data.title}
+          loading="eager"
+          style="border-radius:var(--radius);border:1px solid var(--line);margin-bottom:32px;max-height:400px;width:100%;object-fit:cover"
+        />
+      )}
+      <div class="markdown" data-article>
+        <Content />
+      </div>
+
+      <nav class="post-nav" aria-label="文章导航">
+        {prev && (
+          <a href={`/posts/${prev.id.replace(/\.md$/i, '')}`}>
+            <small>← 上一篇</small>
+            <strong>{prev.data.title}</strong>
+          </a>
+        )}
+        {next && (
+          <a href={`/posts/${next.id.replace(/\.md$/i, '')}`}>
+            <small>下一篇 →</small>
+            <strong>{next.data.title}</strong>
+          </a>
+        )}
+      </nav>
+    </article>
+
+    <aside class="post-aside">
+      {tocItems.length > 0 && (
+        <div class="aside-card">
+          <h4>目录</h4>
+          <nav class="toc-list" data-toc aria-label="文章目录">
+            {tocItems.map((h) => (
+              <a class={`lvl-${h.depth}`} href={`#${h.slug}`}>{h.text}</a>
+            ))}
+          </nav>
+        </div>
+      )}
+      <div class="aside-card">
+        <h4>关于本文</h4>
+        <p style="margin-bottom:12px">
+          文章由 <strong style="color:var(--text)">{data.author}</strong> 维护，
+          存放于内容集合 <code style="font-family:var(--font-mono);font-size:.8em">src/content/{id}.md</code>。
+        </p>
+        <a class="btn btn-ghost btn-sm" href="/blog">返回列表</a>
+      </div>
+    </aside>
+  </section>
+</Base>
+
+<script>
+  import '../../scripts/post-utils';
+</script>

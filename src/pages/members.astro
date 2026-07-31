@@ -1,0 +1,74 @@
+---
+import Base from '../layouts/Base.astro';
+import { Icon } from 'astro-icon/components';
+import EmptyState from '../components/EmptyState.astro';
+import { members } from '../data/members';
+---
+
+<Base
+  title="Members | LZ-Team"
+  activeNav="members"
+>
+  <section class="container page-hero">
+    <p class="eyebrow">whoami && id && groups</p>
+    <h1 class="hero-title"><span class="gradient-text">Members</span></h1>
+  </section>
+
+  <section class="container section-tight">
+    {
+      members.length === 0 ? (
+        <EmptyState
+          text="暂时没有成员"
+        />
+      ) : (
+        <div class="member-grid">
+          {
+            members.map((member) => (
+              <article class="member-card">
+                {member.blog ? (
+                  <a
+                    class="member-link"
+                    href={member.blog}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={`${member.name} 的博客`}
+                    aria-label="博客链接"
+                  >
+                    <Icon name="ph:link" aria-hidden="true" />
+                  </a>
+                ) : (
+                  <span class="member-link is-broken" title="未提供博客链接" aria-label="未提供博客链接">
+                    <Icon name="ph:link-break" aria-hidden="true" />
+                  </span>
+                )}
+
+                <div class="member-head">
+                  {member.avatar ? (
+                    <img
+                      class="member-avatar"
+                      src={member.avatar}
+                      alt={member.name}
+                      loading="lazy"
+                      width="56"
+                      height="56"
+                    />
+                  ) : (
+                    <div class="member-avatar">{member.id}</div>
+                  )}
+                  <div>
+                    <h3 class="member-name">{member.name}</h3>
+                    <p class="member-role">{member.role}</p>
+                  </div>
+                </div>
+                <p class="member-bio">{member.bio}</p>
+                <div class="skill-list">
+                  {member.skills.map((skill) => <span class="skill-chip">{skill}</span>)}
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      )
+    }
+  </section>
+</Base>

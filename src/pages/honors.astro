@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import EmptyState from '../components/EmptyState.astro';
+import { honors } from '../data/honors';
+---
+
+<Base
+  title="Honors | LZ-Team"
+  activeNav="honors"
+>
+  <section class="container page-hero">
+    <p class="eyebrow">cat ./honors.log | tail -f</p>
+    <h1 class="hero-title"><span class="gradient-text">Honors</span></h1>
+  </section>
+
+  <section class="container section-tight">
+    {
+      honors.length === 0 ? (
+        <EmptyState text="暂时没有内容" />
+      ) : (
+        <ul class="timeline">
+          {
+            honors.map((honor) => (
+              <li class="timeline-item">
+                <div class="timeline-head">
+                  <time class="timeline-time">{honor.season}</time>
+                  <span class="timeline-rank">{honor.rank}</span>
+                </div>
+                <h3 class="timeline-title">{honor.title}</h3>
+                <p class="timeline-desc">{honor.description}</p>
+              </li>
+            ))
+          }
+        </ul>
+      )
+    }
+  </section>
+</Base>

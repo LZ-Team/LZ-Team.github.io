@@ -1,0 +1,53 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  activeNav?: 'home' | 'members' | 'honors' | 'blog' | 'projects';
+}
+
+const { activeNav = 'home' } = Astro.props;
+
+const links = [
+  { href: '/', key: 'home', label: 'Home', index: '01', icon: 'ph:house' },
+  { href: '/blog', key: 'blog', label: 'Blog', index: '04', icon: 'ph:notebook' },
+  { href: '/members', key: 'members', label: 'Members', index: '02', icon: 'ph:users-three' },
+  { href: '/honors', key: 'honors', label: 'Honors', index: '03', icon: 'ph:trophy' },
+  { href: '/projects', key: 'projects', label: 'Projects', index: '05', icon: 'ph:squares-four' }
+];
+---
+
+<aside class="sidebar" aria-label="侧边导航">
+  <a class="brand" href="/" aria-label="LZ-Team 首页">
+    <span class="brand-mark">
+      <img src="/lz_logo.png" alt="LZ-Team Logo" width="44" height="44" />
+    </span>
+    <span class="brand-text">
+      <span class="brand-name">LZ-Team</span>
+      <span class="brand-tagline">Capture The Flag</span>
+    </span>
+  </a>
+
+  <nav class="side-nav" aria-label="主导航">
+    {
+      links.map((link) => (
+        <a
+          class:list={['side-link', { active: activeNav === link.key }]}
+          href={link.href}
+          aria-current={activeNav === link.key ? 'page' : undefined}
+        >
+          <span class="nav-icon" aria-hidden="true"><Icon name={link.icon} /></span>
+          <span class="nav-index">{link.index}</span>
+          <span class="nav-label">{link.label}</span>
+        </a>
+      ))
+    }
+  </nav>
+
+  <div class="sidebar-actions">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换昼夜主题" title="切换主题">
+      <Icon class="icon-moon" name="ph:moon" aria-hidden="true" />
+      <Icon class="icon-sun" name="ph:sun" aria-hidden="true" />
+      <span class="theme-label-text" data-theme-label>Dark</span>
+    </button>
+  </div>
+</aside>

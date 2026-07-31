@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import { Icon } from 'astro-icon/components';
+
+const guides: { href: string; icon: string; title: string; desc?: string }[] = [
+  { href: '/blog', icon: 'ph:notebook', title: 'Blog' },
+  { href: '/members', icon: 'ph:users-three', title: 'Members' },
+  { href: '/honors', icon: 'ph:trophy', title: 'Honors' },
+  { href: '/projects', icon: 'ph:squares-four', title: 'Projects' }
+];
+---
+
+<Base title="LZ-Team | CTF Cyber Base" activeNav="home" intro>
+  <!-- 第一屏：战队简介居中 -->
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">./pwn_the_world</p>
+      <h1 class="hero-title">
+        <span class="gradient-text">LZ-Team</span>
+        CTF Cyber Base
+      </h1>
+    </div>
+
+    <!-- 向下滚动提示 -->
+    <a class="scroll-hint" href="#guides" aria-label="向下滚动查看引导">
+      <Icon name="ph:arrow-down" aria-hidden="true" />
+      <span>SCROLL</span>
+    </a>
+  </section>
+
+  <!-- 第二屏：引导卡片垂直居中 -->
+  <section id="guides" class="guide-section container reveal">
+    <div class="guide-grid">
+      {
+        guides.map((guide) => (
+          <a class="guide-card" href={guide.href}>
+            <span class="guide-arrow" aria-hidden="true"><Icon name="ph:arrow-right" /></span>
+            <div class="guide-icon" aria-hidden="true"><Icon name={guide.icon} /></div>
+            <h3 class="guide-title">{guide.title}</h3>
+            {guide.desc && <p class="guide-desc">{guide.desc}</p>}
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<script>
+  const hint = document.querySelector<HTMLAnchorElement>('.scroll-hint');
+  hint?.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('guides')?.scrollIntoView({ behavior: 'smooth' });
+  });
+</script>

@@ -1,0 +1,69 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  index?: number;
+}
+
+const { post, index = 0 } = Astro.props;
+const { data, id } = post;
+const slug = id.replace(/\.md$/i, '');
+const categories = data.categories.length > 0 ? data.categories : ['Misc'];
+const categoryKeys = categories.map((c) => c.toLowerCase());
+const diffKey = data.difficulty.toLowerCase();
+const dateLabel = data.date.toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric'
+});
+
+const categoryIcons: Record<string, string> = {
+  web: 'ph:globe',
+  pwn: 'ph:bug',
+  reverse: 'ph:binary',
+  crypto: 'ph:key',
+  misc: 'ph:question'
+};
+const iconFor = (key: string) => categoryIcons[key] ?? 'ph:flag';
+---
+
+<article
+  class="post-card"
+  data-card
+  data-categories={categoryKeys.join(',')}
+  style={`animation-delay:${Math.min(index, 8) * 60}ms`}
+>
+  <a href={`/posts/${slug}`} class="post-card-link">
+    {data.index_img && (
+      <div class="post-card-cover">
+        <img src={data.index_img} alt={data.title} loading="lazy" width="640" height="360" />
+      </div>
+    )}
+    <div class="post-card-body">
+      <div class="post-card-meta">
+        <div class="post-card-cats">
+          {categories.map((cat, i) => {
+            const key = categoryKeys[i];
+            return (
+              <span class:list={['tag', 'tag--category', `tag--${key}`]}>
+                <Icon class="tag-icon" name={iconFor(key)} aria-hidden="true" />
+                {cat}
+              </span>
+            );
+          })}
+        </div>
+        <time datetime={data.date.toISOString()}>{dateLabel}</time>
+        <span class:list={['difficulty', `difficulty--${diffKey}`]}>{data.difficulty}</span>
+      </div>
+      <h3 class="post-card-title">{data.title}</h3>
+      <p class="post-card-excerpt">{data.description}</p>
+      {data.tags.length > 0 && (
+        <div class="post-card-tags">
+          {data.tags.slice(0, 5).map((tag) => <span class="tag">#{tag}</span>)}
+        </div>
+      )}
+    </div>
+  </a>
+</article>

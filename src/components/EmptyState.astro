@@ -1,0 +1,16 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  text?: string;
+  hint?: string;
+}
+
+const { text = '暂时没有内容', hint } = Astro.props;
+---
+
+<div class="empty-block">
+  <Icon class="empty-block-icon" name="ph:file-x" aria-hidden="true" />
+  <p class="empty-block-text">{text}</p>
+  {hint && <p class="empty-block-hint">{hint}</p>}
+</div>
