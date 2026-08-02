@@ -455,7 +455,7 @@ body.reading .content {
   color: #eaf2ff;
 }
 
-/* 大屏背景视频：铺满首屏，等比裁剪，不拦截点击 */
+/* 大屏背景视频：铺满首屏，等比裁剪，不拦截点击，不可选中/拖拽（纯装饰） */
 .hero-video {
   position: absolute;
   inset: 0;
@@ -464,6 +464,9 @@ body.reading .content {
   height: 100%;
   object-fit: cover;
   pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* 遮罩层：压暗视频，确保标题与滚动提示清晰可读 */
