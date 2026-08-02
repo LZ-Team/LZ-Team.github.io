@@ -3,6 +3,9 @@ import Base from '../layouts/Base.astro';
 import { Icon } from 'astro-icon/components';
 import EmptyState from '../components/EmptyState.astro';
 import { projects } from '../data/projects';
+
+// 未配置 icon 时的默认图标（兜底，避免空值触发 local 图标集错误）
+const DEFAULT_ICON = 'ph:bug';
 ---
 
 <Base
@@ -30,7 +33,7 @@ import { projects } from '../data/projects';
                 target={project.external ? '_blank' : undefined}
                 rel={project.external ? 'noopener noreferrer' : undefined}
               >
-                <div class="project-icon" aria-hidden="true"><Icon name={project.icon} /></div>
+                <div class="project-icon" aria-hidden="true"><Icon name={project.icon || DEFAULT_ICON} /></div>
                 <div class="project-body">
                   <h3 class="project-title">{project.title}</h3>
                   <p class="project-desc">{project.description}</p>

@@ -4,14 +4,15 @@ description: 本次 LZ-Team（雷泽战队）排名第 9。复盘 Caddy 配置�
 date: 2026-03-17
 updated: 2026-03-17
 categories:
+  - XCTF
+  - Writeup
+tags:
   - Web
   - Pwn
   - Crypto
   - Reverse
   - Misc
   - AI
-  - Writeup
-tags:
   - SUCTF
   - Caddy
   - 文件读取

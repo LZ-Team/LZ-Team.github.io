@@ -1,11 +1,14 @@
 ---
+import { Image } from 'astro:assets';
+import logo from '../assets/lz-logo.png';
+
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="container footer-inner">
     <div class="footer-brand">
-      <img src="/lz_logo.png" alt="LZ-Team" width="30" height="30" />
+      <Image src={logo} alt="LZ-Team" width={30} height={30} />
       <span>LZ-Team</span>
     </div>
 

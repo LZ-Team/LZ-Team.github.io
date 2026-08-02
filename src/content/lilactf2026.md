@@ -4,14 +4,15 @@ description: 复盘 LilacCTF 2026 的完整解题链路：PHP development server
 date: 2026-01-28
 updated: 2026-01-28
 categories:
+  - XCTF
+  - Writeup
+tags:
   - Web
   - Pwn
   - Crypto
   - Reverse
-  - Misc
-  - Writeup
-tags:
   - LilacCTF
+  - Misc
   - PHP
   - Jail
   - 沙箱逃逸

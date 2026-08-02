@@ -35,7 +35,7 @@ const iconFor = (key: string) => categoryIcons[key] ?? 'ph:flag';
   data-categories={categoryKeys.join(',')}
   style={`animation-delay:${Math.min(index, 8) * 60}ms`}
 >
-  <a href={`/posts/${slug}`} class="post-card-link">
+  <a href={`/blog/${slug}`} class="post-card-link">
     {data.index_img && (
       <div class="post-card-cover">
         <img src={data.index_img} alt={data.title} loading="lazy" width="640" height="360" />

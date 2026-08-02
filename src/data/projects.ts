@@ -12,4 +12,12 @@ export interface Project {
  * 这是示例数据，替换为自己的作品即可，页面会自动渲染为链接卡片。
  */
 export const projects: Project[] = [
+  {
+    title: 'dome',
+    description: '',
+    href: '',
+    tags: [],
+    icon: 'ph:bug',
+    external: true,
+  },
 ];

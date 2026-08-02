@@ -20,7 +20,7 @@ export function initWriteupFilters(): void {
     let visibleCount = 0;
 
     cards.forEach((card) => {
-      const cats = (card.dataset.categories || card.dataset.category || '')
+      const cats = (card.dataset.categories || '')
         .split(',')
         .map((s) => s.trim())
         .filter(Boolean);

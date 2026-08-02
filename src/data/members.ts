@@ -14,13 +14,17 @@ export const members: Member[] = [
     name: 'XU17',
     role: 'Captain / Web',
     bio: '',
-    skills: ['AI', '溯源取证']
+    avatar: 'https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202412222328446.jpg',
+    blog: 'https://xu17.top/',
+    skills: ['Web', 'AI']
   },
   {
     id: '0x02',
     name: 'ST4R',
     role: 'Misc / ALL',
     bio: '',
+    avatar: 'https://nanxer-1322358327.cos.ap-guangzhou.myqcloud.com/blog/st4r.jpg',
+    blog: '',
     skills: ['AI', '溯源取证']
   },
   {
@@ -37,6 +41,8 @@ export const members: Member[] = [
     name: 'DreamCat',
     role: 'Reverse',
     bio: '',
+    avatar: 'https://nanxer-1322358327.cos.ap-guangzhou.myqcloud.com/blog/dreamCat.jpg',
+    blog: '',
     skills: ['Reverse', 'AI']
   },
   {
@@ -44,6 +50,8 @@ export const members: Member[] = [
     name: 'suancaisoup',
     role: 'Pwn',
     bio: '',
+    avatar: 'https://nanxer-1322358327.cos.ap-guangzhou.myqcloud.com/blog/202603042216448157118.jpg',
+    blog: '',
     skills: ['Pwn']
   },
   {
@@ -51,6 +59,8 @@ export const members: Member[] = [
     name: 'miffya',
     role: 'Pwn',
     bio: '',
+    avatar: 'https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202412241939695.jpg',
+    blog: 'https://www.cnblogs.com/miffya',
     skills: ['Pwn']
   },
   {
@@ -58,6 +68,8 @@ export const members: Member[] = [
     name: 't0rch',
     role: 'Reverse',
     bio: '',
+    avatar: 'https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202501112240758.jpg',
+    blog: 'https://bbs.kanxue.com/homepage-1019613.htm',
     skills: ['Reverse']
   },
   {
@@ -65,6 +77,8 @@ export const members: Member[] = [
     name: 'warmlight',
     role: 'Reverse',
     bio: '',
+    avatar: 'https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202412241937379.jpeg',
+    blog: 'https://warmlight19.github.io/',
     skills: ['Reverse']
   }
 

@@ -20,8 +20,6 @@ export default defineConfig({
     icon({
       include: {
         ph: [
-          'sun',
-          'moon',
           'arrow-up',
           'arrow-up-right',
           'arrow-right',

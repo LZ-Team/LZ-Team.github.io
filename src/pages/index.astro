@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { Icon } from 'astro-icon/components';
 
-const guides: { href: string; icon: string; title: string; desc?: string }[] = [
+const guides: { href: string; icon: string; title: string }[] = [
   { href: '/blog', icon: 'ph:notebook', title: 'Blog' },
   { href: '/members', icon: 'ph:users-three', title: 'Members' },
   { href: '/honors', icon: 'ph:trophy', title: 'Honors' },
@@ -13,6 +13,14 @@ const guides: { href: string; icon: string; title: string; desc?: string }[] = [
 <Base title="LZ-Team | CTF Cyber Base" activeNav="home" intro>
   <!-- 第一屏：战队简介居中 -->
   <section class="hero">
+    <!-- 大屏背景视频：VP9 WebM 优先（体积更小），H.264 MP4 兜底（Safari 全兼容） -->
+    <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+      <source src="/hero.webm" type="video/webm" />
+      <source src="/hero.mp4" type="video/mp4" />
+    </video>
+    <!-- 遮罩层：压暗视频，确保标题与滚动提示清晰可读 -->
+    <div class="hero-overlay" aria-hidden="true"></div>
+
     <div class="hero-copy">
       <p class="eyebrow">./pwn_the_world</p>
       <h1 class="hero-title">
@@ -37,7 +45,6 @@ const guides: { href: string; icon: string; title: string; desc?: string }[] = [
             <span class="guide-arrow" aria-hidden="true"><Icon name="ph:arrow-right" /></span>
             <div class="guide-icon" aria-hidden="true"><Icon name={guide.icon} /></div>
             <h3 class="guide-title">{guide.title}</h3>
-            {guide.desc && <p class="guide-desc">{guide.desc}</p>}
           </a>
         ))
       }
@@ -49,6 +56,14 @@ const guides: { href: string; icon: string; title: string; desc?: string }[] = [
   const hint = document.querySelector<HTMLAnchorElement>('.scroll-hint');
   hint?.addEventListener('click', (e) => {
     e.preventDefault();
-    document.getElementById('guides')?.scrollIntoView({ behavior: 'smooth' });
+    // 直接滚动到页面底部，让侧边栏菜单浮现且页脚完整显示
+    const target = document.documentElement.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: target, behavior: 'smooth' });
   });
+
+  // 尊重系统「减少动态效果」设置：暂停背景视频
+  const heroVideo = document.querySelector<HTMLVideoElement>('.hero-video');
+  if (heroVideo && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    heroVideo.pause();
+  }
 </script>
