@@ -1,26 +1,34 @@
 ---
-title: SUCTF2026-WriteUp
-layout: post
-categories: CTF-Writeup
-date: 2026-3-17 9:0:09
-tags: CTF
-description: SUCTF2026-WriteUp
+title: SUCTF 2026
+description: 本次 LZ-Team（雷泽战队）排名第 9。复盘 Caddy 配置暴露与文件读取链路的完整解题过程，包括信息收集、配置审计与最终取 flag。
+date: 2026-03-17
+updated: 2026-03-17
+categories:
+  - XCTF
+  - Writeup
+tags:
+  - Web
+  - Pwn
+  - Crypto
+  - Reverse
+  - Misc
+  - AI
+  - SUCTF
+  - Caddy
+  - 文件读取
+difficulty: Medium
+author: LZ-Team
 index_img: https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202603170907662.png
 banner_img: https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202603170907662.png
-
 ---
-
-# SUCTF2026-Writeup
 
 - 本次lz雷泽战队排名第9，感谢师傅们辛苦付出！
 
-![img](https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202603170907662.png)
-
 ![img](https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202603170801748.png)
 
-# Web
+## Web
 
-## SU_Thief
+### SU_Thief
 
 懒惰的管理员忽略了最近的thief可以帮助他偷取/root/flag"。这很可能是指 Grafana 的文件读取漏洞 CVE-2021-43798
 
@@ -150,7 +158,7 @@ if __name__ == "__main__":
 
 得到：`SUCTF{c4ddy_4dm1n_4p1_2019_pr1v35c}`
 
-## SU_jdbc-master
+### SU_jdbc-master
 
 ![img](https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202603170802565.png)
 
@@ -586,7 +594,7 @@ if __name__ == "__main__":
 
 ![img](https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202603170801992.png)
 
-## SU_Note
+### SU_Note
 
 站点是一个笔记系统，普通用户登录后可以访问 `/bot/`，提交一个 URL 让 Bot 去访问。题目提示 flag 在 Bot 的 notes 里，同时明确说了不要爆破密码，所以思路应该放在“获取 Bot 身份”而不是猜管理员密码。
 
@@ -745,7 +753,7 @@ if __name__ == "__main__":
 
 得到flag：SUCTF{110110100}
 
-## SU_Note_rev
+### SU_Note_rev
 
 **漏洞分析**
 
@@ -898,7 +906,7 @@ VPS接收
 SUCTF{1101101010}
 ```
 
-## SU_cmsAgain
+### SU_cmsAgain
 
  **1. 利用 Cookie 反序列化 + SQL 注入读取管理员密码**
 
@@ -1280,7 +1288,7 @@ if __name__ == "__main__":
     main()
 ```
 
-## SU_sqli
+### SU_sqli
 
 打开页面只有一个搜索框，但它要求有效签名才能查询，因此这题分两部分：
 
@@ -1735,7 +1743,7 @@ if __name__ == "__main__":
 SUCTF{P9s9L_!Nject!On_IS_3@$Y_RiGht}
 ```
 
-## SU_uri
+### SU_uri
 
 这题真正的利用链不是一条普通的 SSRF，也不是我一开始打到的那套 `SU Query`。  正确方向是:
 
@@ -2147,7 +2155,7 @@ POST /containers/<name>/attach?logs=1&stdout=1&stderr=1&stream=0
 SUCTF{SsRF_tO_rC3_by_d0CkEr_15_s0_FUn}
 ```
 
-## SU_wms
+### SU_wms
 
 **整体利用链**
 
@@ -2639,9 +2647,9 @@ GET /jeewms/cmd.jsp?cmd=/usr/bin/date%20-f%20/<flag_path>
 suctf{v3ry_e45y_uN4utHOrIZEd_rC3!_!aAA}
 ```
 
-# Pwn
+## Pwn
 
-## SU_evbuffer 
+### SU_evbuffer 
 
 libevent库进行交互的程序，返回包0x50大小包含了程序的堆地址和libc地址。
 
@@ -2837,7 +2845,7 @@ if __name__ == '__main__':
     main()
 ```
 
-## SU_Box
+### SU_Box
 
 **程序逻辑**
 
@@ -3101,7 +3109,7 @@ var rwx = arb_read64(wasm_addr + 0x80n);
 SUCTF{y0u_kn@w_v8_p@tch_gap_we1!}
 ```
 
-## SU_minivfs
+### SU_minivfs
 
 题目实现了一个极简虚拟文件系统，只暴露四个命令：
 
@@ -3759,7 +3767,7 @@ if __name__ == "__main__":
 flag{min1_vfs_5afe_b4ck3nd_chunk5_h1dd3n_s3cre7_SUCTF_2026}
 ```
 
-## SU_Chronos_Ring
+### SU_Chronos_Ring
 
 题目信息
 
@@ -4462,7 +4470,7 @@ add-symbol-file chronos_ring.ko <text_base>
 
 否则 `0x1007` 会直接返回 `-EPERM`
 
-## SU_Chronos_Ring1
+### SU_Chronos_Ring1
 
 这题的关键不在于传统内核提权，而在于识别题目主动给出的 root sink：
 
@@ -5192,7 +5200,7 @@ if __name__ == "__main__":
 SUCTF{JEQG2YLEMUQGCIDNNFZXIYLLMUWCASJANBXXAZJAPFXXKIDXN5XCO5BANVQWWZJANF2A====}
 ```
 
-## SU_EzRouter 
+### SU_EzRouter 
 
 **1. 题目概述**
 
@@ -5539,9 +5547,9 @@ vpn low16 == 0x02a0
 SUCTF{ExCeED_4UThOR1Ty_W1tH_1pc}
 ```
 
-# Reverse
+## Reverse
 
-## SU_West
+### SU_West
 
 **一、初步分析**
 
@@ -6591,7 +6599,7 @@ flag: SUCTF{y0u_h4v3_0v3rc0m3_81_d1ff1cu1t135}
 correct
 ```
 
-## SU_old_bin
+### SU_old_bin
 
 先看文件基本信息。
 
@@ -7303,7 +7311,7 @@ if __name__ == "__main__":
 
 得到flag：`flag{3putis6omqi3u7034722576kpze4udduejoko8zr3e6ozvp8mosm6065q1}`
 
-## SU_Lock
+### SU_Lock
 
 这题表面上给的是一个正常软件安装包 `Everything_Setup_1.4.1.exe`，实际上是一条比较完整的投递链：
 
@@ -7617,7 +7625,7 @@ if __name__ == "__main__":
 SUCTF{SJCMA23-AX8MQ3IU-8UHCSO90-QCM1S0L}
 ```
 
-## SU_Revird
+### SU_Revird
 
 `chal.exe` 里有一层明显的误导
 
@@ -7712,7 +7720,7 @@ mov dword ptr [...], 0x52455649 ; 'IVER'
 SUCTF{D0_y0U_unD3r5t4nd_Th15_m491c4l_435?_41218}
 ```
 
-## SU_easygal
+### SU_easygal
 
 1. 题目类型判断
 
@@ -8178,7 +8186,7 @@ assert states[(132, 322)] == 1
 SUCTF{92d1c2c3f6e55fabbc3a6ffde57c7341}
 ```
 
-## SU_MvsicPlayer
+### SU_MvsicPlayer
 
 先解包`app.asar` 得到源码
 
@@ -9996,9 +10004,9 @@ print(f"MD5: {md5}")
 # SUCTF{16ac79d3510d6ea4b5338fade80459b8}
 ```
 
-# Crypto
+## Crypto
 
-## SU_Prng
+### SU_Prng
 
 题目附件
 
@@ -10470,7 +10478,7 @@ if __name__ == "__main__":
     main()
 ```
 
-## **SU_Restaurant**
+### **SU_Restaurant**
 
 题目核心类有两个：
 
@@ -10918,7 +10926,7 @@ if __name__ == "__main__":
     main()
 ```
 
-## **SU_RSA**
+### **SU_RSA**
 
 **思路概述**
 
@@ -11168,7 +11176,7 @@ print(long_to_bytes(int(m)))
 b'SUCTF{congratulation_you_know_small_d_with_hint_factor}'
 ```
 
-## **SU_Isogeny**
+### **SU_Isogeny**
 
 **题目类型**
 
@@ -11556,7 +11564,7 @@ print(flag.decode())
 SUCTF{Actu41ly_th1s_iS_4_Pr0blem_7hat_w4s_s0lved_1n_2023_https://eprint.iacr.org/2023/1409}
 ```
 
-## SU_Lattice
+### SU_Lattice
 
 连接远程后给出一个简单的菜单：
 
@@ -12000,9 +12008,9 @@ Flag
 SUCTF{b8faea32-9f91-42b5-9355-33865e06270c}
 ```
 
-# Misc
+## Misc
 
-## SU_Signin
+### SU_Signin
 
 ![img](https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202603170801232.png)
 
@@ -12010,7 +12018,7 @@ SUCTF{b8faea32-9f91-42b5-9355-33865e06270c}
 SUCTF{W3lc0me_2_SUC7F2026!!!!}
 ```
 
-## SU_Artifact_Online
+### SU_Artifact_Online
 
 题目结论
 
@@ -12423,7 +12431,7 @@ if __name__ == "__main__":
     main()
 ```
 
-## SU_MirrorBus9
+### SU_MirrorBus9
 
 题目信息
 
@@ -13060,7 +13068,7 @@ if __name__ == "__main__":
 
 ![img](https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202603170802004.png)
 
-## SU_forensics
+### SU_forensics
 
 题目信息
 
@@ -13390,9 +13398,9 @@ MD5 结果：
 SUCTF{39e850db5d740c54df4281e39fb3866d}
 ```
 
-# AI
+## AI
 
-## SU_BabyAI
+### SU_BabyAI
 
 "Something is missing" 的提示含义：**求解需要** **`model.pth`** **中的权重**，没有权重就无法还原系数矩阵，是破解的前提。
 
@@ -13450,7 +13458,7 @@ $$\mathbf{Y} \equiv \mathbf{A}\,\mathbf{x} + \mathbf{e} \pmod{q}$$
 
 估算格的短向量：
 
-对 $$ \mathbf{x} $$做中心化：令 $$\tilde{\mathbf{x}} = \mathbf{x} - 79（$$均值），则 $$ \tilde{x}_i \in [-47, 47]$$。
+对 $$ \mathbf{x} $$做中心化：令 $$\tilde{\mathbf{x}} = \mathbf{x} - 79$（均值），则 $$ \tilde{x}_i \in [-47, 47]$$。
 
 构造的目标向量为 $$ \mathbf{v} = (-\mathbf{e},\ \tilde{\mathbf{x}},\ 1)$$，其欧氏范数：
 
@@ -13702,7 +13710,7 @@ for row in Bred:
 SUCTF{PyT0rch_m0del_c4n_h1d3_LWE_pr0bl3m}
 ```
 
-## SU_easyLLM
+### SU_easyLLM
 
 **题目分析**
 
@@ -13902,7 +13910,7 @@ print("[!] Failed - try collecting more outputs")
 SUCTF{LLM_w1ll_ch4nge_ev3rything}
 ```
 
-## SU_thief
+### SU_thief
 
 1.访问靶机，首页是空页面。通过目录扫描和测试发现两个关键端点：
 
@@ -14160,7 +14168,7 @@ flag
 SUCTF{n0t_4ll_h1st0ry_t3lls_th3_truth_6a4e2b8d}
 ```
 
-## SU_谁是小偷
+### SU_谁是小偷
 
 **源码分析**
 

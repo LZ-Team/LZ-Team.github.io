@@ -1,0 +1,104 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { Icon } from 'astro-icon/components';
+import Sidebar from '../components/Sidebar.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  activeNav?: 'home' | 'members' | 'honors' | 'blog' | 'projects';
+  /** 沉浸式首屏：不使用侧边栏，内容占满全宽 */
+  intro?: boolean;
+  /** 阅读模式：隐藏侧边栏，正文占满全宽 */
+  reading?: boolean;
+}
+
+const {
+  title,
+  description = 'LZ-Team —— 专注 Web、Pwn、Reverse、Crypto、Misc 的 CTF 战队博客',
+  activeNav = 'home',
+  intro = false,
+  reading = false
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/png" href="/lz-logo.png" />
+    <ClientRouter />
+
+    <!-- 原生 View Transition 在本环境不稳定（偶发 abort 导致切换闪动/无动画跳变），
+         在 Astro 路由脚本加载前禁用它，统一降级为稳定的 SPA 替换 + CSS 内容淡入 -->
+    <meta name="astro-view-transitions-fallback" content="swap" />
+    <script is:inline>
+      try {
+        Object.defineProperty(Document.prototype, 'startViewTransition', {
+          configurable: true,
+          value: undefined
+        });
+      } catch (_) {}
+    </script>
+
+  </head>
+  <body class:list={[intro && 'intro', reading && 'reading']}>
+    <!-- 氛围背景层：跨页保留，避免切换时重建闪烁 -->
+    <div class="bg-aurora" aria-hidden="true" transition:persist></div>
+    <div class="bg-grid" aria-hidden="true" transition:persist></div>
+    <canvas id="matrix" class="matrix-canvas" aria-hidden="true" transition:persist></canvas>
+
+    <Sidebar activeNav={activeNav} />
+
+    <div class="content">
+      <main>
+        <slot />
+      </main>
+
+      <Footer />
+    </div>
+
+    <!-- 回到顶部：圆环滚动进度 -->
+    <button
+      class="scroll-top"
+      type="button"
+      data-scroll-top
+      aria-label="回到顶部"
+      title="回到顶部"
+      transition:persist
+    >
+      <svg class="scroll-top-rings" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true">
+        <circle class="scroll-top-bg" cx="24" cy="24" r="20" />
+        <circle class="scroll-top-ring" cx="24" cy="24" r="20" data-ring />
+      </svg>
+      <Icon class="scroll-top-arrow" name="ph:arrow-up" aria-hidden="true" />
+    </button>
+
+    <script>
+      import { initMatrix } from '../scripts/matrix';
+      // 以下模块自注册初始化（副作用导入）
+      import '../scripts/scroll-progress';
+      import '../scripts/intro-reveal';
+
+      let cleanupMatrix: (() => void) | null = null;
+
+      // astro:page-load 在首次加载与每次视图过渡导航后都会触发
+      document.addEventListener('astro:page-load', () => {
+        cleanupMatrix?.();
+        const canvas = document.getElementById('matrix');
+        if (canvas instanceof HTMLCanvasElement) {
+          cleanupMatrix = initMatrix(canvas);
+        }
+      });
+    </script>
+  </body>
+</html>

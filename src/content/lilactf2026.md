@@ -1,10 +1,23 @@
 ---
-title: LilacCTF2026-WriteUp
-layout: post
-categories: CTF-Writeup
-date: 2026-1-28 17:20:00
-tags: CTF
-description: LilacCTF2026-WriteUp
+title: LilacCTF 2026
+description: 复盘 LilacCTF 2026 的完整解题链路：PHP development server 源码泄露、Jail 沙箱逃逸等题目的思路与 payload。
+date: 2026-01-28
+updated: 2026-01-28
+categories:
+  - XCTF
+  - Writeup
+tags:
+  - Web
+  - Pwn
+  - Crypto
+  - Reverse
+  - LilacCTF
+  - Misc
+  - PHP
+  - Jail
+  - 沙箱逃逸
+difficulty: Medium
+author: LZ-Team
 index_img: https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202601292240133.jpeg
 banner_img: https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202601292240133.jpeg
 ---
@@ -13,9 +26,9 @@ banner_img: https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202601292
 
 ![img](https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202601292238563.png)
 
-# WEB
+## WEB
 
-## keep
+### keep
 
 `php＜= 7 . 4 . 21 development server`源码泄露漏洞
 
@@ -60,7 +73,7 @@ bak文件要解析成php，根据漏洞特性，第二个请求加解析
 
 拿到flag：`cyberpeace{5adae4b50cb705043521800c610c08e9}`
 
-## checkin
+### checkin
 
 打开题目所给网址，是一个python编译器，无论怎么输入都不给结果，看起来是一个黑盒题目，先用dirsearch扫一下
 
@@ -189,7 +202,7 @@ else:
 
 得出flag：`LilacCTF{Pyth0n_3_13_N3w_f3A7u@3}`
 
-## Nailong
+### Nailong
 
 **1. 题目分析**
 
@@ -313,7 +326,7 @@ if __name__ == "__main__":
 
 ![img](https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202601292238417.png)
 
-## Path
+### Path
 
 1. **`\\?\GLOBALROOT\Device\Mup\`** 是 Windows 内核命名空间路径
 2. **`Device\Mup`**(Multiple UNC Provider) 是 Windows 处理 UNC 路径的驱动
@@ -400,9 +413,9 @@ LilacCTF{W1n32_t0_NT_P4th_C0nv3rs10n_M4st3r_2026}
 
 ![img](https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202601292238259.png)
 
-# Reverse
+## Reverse
 
-## Kilogram
+### Kilogram
 
 给chall.exe脱个壳看一下，感觉帮助不是很大
 
@@ -1000,7 +1013,7 @@ print(f"Flag: LilacCTF{{{flag_inner.decode()}}}")
 LilacCTF{e@sy_Pyth0n_SMC!}
 ```
 
-## JustROM
+### JustROM
 
 只给了二进制数据，需要自己识别架构，前0x1000字节是向量表
 
@@ -1727,7 +1740,7 @@ if __name__ == "__main__":
 
 ![img](https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202601292238686.png)
 
-## NineApple
+### NineApple
 
 Swift开发的ios app
 
@@ -2480,9 +2493,9 @@ if __name__ == "__main__":
 Lilac{10S_aNd_l1lac_w1n3_f0r_you}
 ```
 
-# PWN
+## PWN
 
-## Gate-Way
+### Gate-Way
 
 **题目分析**
 
@@ -2726,7 +2739,7 @@ if __name__ == '__main__':
 
 ![img](https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202601292238018.png)
 
-## bytezoo
+### bytezoo
 
 **题目分析**
 
@@ -2875,9 +2888,9 @@ io.interactive()
 
 ![img](https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202601292238670.png)
 
-# Misc
+## Misc
 
-## Welcome
+### Welcome
 
 开头为789c，应该为zlib压缩数据
 
@@ -2898,7 +2911,7 @@ except Exception as e:
 
 得到flag：`LilacCTF{W3lc0M3_70_l1L4cc7F_g00D_LuCk}`
 
-## Your GitHub, mine
+### Your GitHub, mine
 
 目标是让 `@lilacctf-tech` 收到一封 `X-GitHub-Sender: tynqf4hn8z-byte` 的邮件，且该邮件是关于创建的issue的。**Issue创建邮件不算**。
 
@@ -2917,7 +2930,7 @@ GitHub的 `@mention` 机制：当你编辑issue body添加 `@mention` 时，GitH
 
 ![img](https://xu17-1326239041.cos.ap-guangzhou.myqcloud.com/xu17/202601292238345.png)
 
-## Sky Is Ours
+### Sky Is Ours
 
 豆包问讯：
 
@@ -2941,15 +2954,15 @@ GitHub的 `@mention` 机制：当你编辑issue body添加 `@mention` 时，GitH
 LilacCTF{QW6097}
 ```
 
-## Questionnaire
+### Questionnaire
 
 ```
 LilacCTF{7h4nk_U_f0r_p4rt1cip4t1n9_L1l4cCTF_2026}
 ```
 
-# Crypto
+## Crypto
 
-## myRSA
+### myRSA
 
 chall.py的逻辑：
 
@@ -2959,7 +2972,7 @@ chall.py的逻辑：
 
 其中 $$ p=pp^2+3*pp+3$$ ， $$ q=pp^2+5*pp+7$$即  $$p$$ 和 $$q$$ 由同一个秘密小整数 $$pp$$ 生成
 
-明文 FLAG 被加密为 $$c = m^e \  mod \  n \ (e=65537)$$，输出公钥 $$n $$和密文 $$c$$
+明文 FLAG 被加密为 $$c = m^e \bmod n \ (e=65537)$$，输出公钥 $$n $$和密文 $$c$$
 
 2.预言机（Oracle）
 
@@ -2969,7 +2982,7 @@ chall.py的逻辑：
 
 构造一条过点 $$(1, y) $$的椭圆曲线。令 $$b=y^2−1 ⇒ E:y^2=x^3+b\ (\ mod\ n)$$，则点 $$G=(1,y)\in E(Z/nZ)$$
 
-分解 $$n$$：计算 $$ P=n*G$$。由于 $$n$$ 是合数，在某个素因子$$P| n$$上，若 $$E(F_p)$$ 整除 $$n$$，则 $$P$$ 在该分量为无穷远点，导致射影坐标的 Z 分量满足 $$p | Z$$。于是 $$p=gcd⁡(P_z,n)$$，成功提取一个素因子。
+分解 $$n$$：计算 $$ P=n*G$$。由于 $$n$$ 是合数，在某个素因子$$P| n$$上，若 $$E(F_p)$$ 整除 $$n$$，则 $$P$$ 在该分量为无穷远点，导致射影坐标的 Z 分量满足 $$p | Z$$。于是 $$p=gcd(P_z,n)$$，成功提取一个素因子。
 
 恢复完整因子分解： 题目中 $$n = p * q * r$$具有特殊结构：由 $$p$$ 计算 $$D=4p−3$$ ，验证其为完全平方数 。
 
@@ -3038,7 +3051,7 @@ if __name__ == "__main__":
 
 flag：`LilacCTF{wHy_NoT_w4tch1ng_yOutub3_with_NPoYb4mbiOg}`
 
-## nestDLP
+### nestDLP
 
 • 题目分析
 

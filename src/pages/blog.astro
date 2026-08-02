@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import { Icon } from 'astro-icon/components';
+import PostCard from '../components/PostCard.astro';
+import EmptyState from '../components/EmptyState.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort((a, b) =>
+  b.data.date.getTime() - a.data.date.getTime()
+);
+
+const categories = ['all', ...new Set(posts.flatMap((p) => p.data.categories))];
+---
+
+<Base
+  title="Blog | LZ-Team"
+  activeNav="blog"
+>
+  <section class="container page-hero">
+    <p class="eyebrow">grep -r "flag" ./</p>
+    <h1 class="hero-title"><span class="gradient-text">Blog</span></h1>
+  </section>
+
+  <section class="container section-tight">
+    {
+      posts.length === 0 ? (
+        <EmptyState text="暂时没有文章"/>
+      ) : (
+        <>
+          <div class="toolbar" data-writeup-toolbar>
+            <div class="filters" role="group" aria-label="分类筛选">
+              {
+                categories.map((cat) => {
+                  const key = cat === 'all' ? 'all' : cat.toLowerCase();
+                  return (
+                    <button class:list={['filter-btn', { active: cat === 'all' }]} type="button" data-filter={key}>
+                      {cat === 'all' ? 'ALL' : cat.toUpperCase()}
+                    </button>
+                  );
+                })
+              }
+            </div>
+
+            <label class="search-box">
+              <Icon class="search-icon" name="ph:magnifying-glass" aria-hidden="true" />
+              <input type="search" data-search placeholder="搜索标题 / 标签 / 关键词" aria-label="搜索文章" />
+            </label>
+          </div>
+
+          <div class="empty-state" data-empty-state>没有匹配的文章，换个关键词试试。</div>
+
+          <div class="post-grid" data-writeup-grid>
+            {posts.map((post, i) => <PostCard post={post} index={i} />)}
+          </div>
+        </>
+      )
+    }
+  </section>
+</Base>
+
+<script>
+  import { initWriteupFilters } from '../scripts/writeups';
+  initWriteupFilters();
+  document.addEventListener('astro:page-load', initWriteupFilters);
+</script>
